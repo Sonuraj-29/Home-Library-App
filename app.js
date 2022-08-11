@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken')
+const path = require('path')
 
 const homeRouter = require('./src/router/bookRouter')
 const addBookRouter = require('./src/router/addBookRouter')
@@ -11,6 +12,7 @@ const loginRouter = require('./src/router/loginRouter');
 const app = new express();
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'))
 
 function verifyToken(req,res,next){
 
@@ -28,11 +30,15 @@ function verifyToken(req,res,next){
     next()
 }
 
-app.use('/books', homeRouter);
-app.use('/add',verifyToken, addBookRouter);
-app.use('/remove', verifyToken, deleteBookRouter)
-app.use('/edit', verifyToken, editBookRouter)
-app.use('/login', loginRouter)
+app.use('/api/books', homeRouter);
+app.use('/api/add',verifyToken, addBookRouter);
+app.use('/api/remove', verifyToken, deleteBookRouter)
+app.use('/api/edit', verifyToken, editBookRouter)
+app.use('/api/login', loginRouter)
+
+app.get('/*', (req,res)=>{
+    res.sendFile(path.join(__dirname,'public/index.html'))
+})
 
 const port = process.env.PORT || 8080 ;
 

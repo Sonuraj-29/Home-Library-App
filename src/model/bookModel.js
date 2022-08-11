@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/Library');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/Library');
 
 const bookSchema = new mongoose.Schema({
     Title : String,
